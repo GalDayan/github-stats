@@ -13,6 +13,7 @@ dotenv = "^0.9.9"
 matplotlib = "^3.10.1"
 pandas = "^2.2.3"
 altair = "^5.5.0"
+tqdm = "^4.67.1"
 
 
 [build-system]
