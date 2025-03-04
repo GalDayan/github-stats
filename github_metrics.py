@@ -140,7 +140,7 @@ def get_prs_between(owner, repo, start_date, end_date, state="closed"):
 
 def process_data(owner, repo, months):
     """Fetch commits and pull requests for the latest `months` period and tag the repo."""
-    now = datetime.datetime.utcnow()
+    now = datetime.datetime.utcnow().replace(tzinfo=datetime.timezone.utc)
     since_date = now - datetime.timedelta(days=30 * months)
     
     logging.info("Starting data fetch for repository %s for the latest %s months (since %s).", repo, months, since_date)

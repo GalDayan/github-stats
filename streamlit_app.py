@@ -4,15 +4,25 @@ import altair as alt
 
 st.title("GitHub Metrics Dashboard")
 
-
 @st.cache_data
 def load_data():
-    commits_df = pd.read_csv("commits_data.csv", parse_dates=["date"])
-    prs_df = pd.read_csv("prs_data.csv", parse_dates=["created_at", "closed_at"])
+    commits_df = pd.read_csv("commits_data_all.csv", parse_dates=["date"])
+    prs_df = pd.read_csv("prs_data_all.csv", parse_dates=["created_at", "closed_at"])
     return commits_df, prs_df
 
-
 commits_df, prs_df = load_data()
+
+# Sidebar repository selection with default "All" option
+repository_option = st.sidebar.selectbox(
+    "Select Repository",
+    options=["All"] + sorted(commits_df["repository"].unique()),
+    index=0
+)
+
+# Filter data if a specific repository is selected
+if repository_option != "All":
+    commits_df = commits_df[commits_df["repository"] == repository_option]
+    prs_df = prs_df[prs_df["repository"] == repository_option]
 
 # Sidebar options for time interval, contributor breakdown metric, and cumulative option
 interval = st.sidebar.selectbox(
@@ -98,8 +108,7 @@ else:
     prs_final = prs_resampled
 
 st.subheader(
-    f"Pull Requests Created ({interval})"
-    + (" (Cumulative)" if cumulative_option else "")
+    f"Pull Requests Created ({interval})" + (" (Cumulative)" if cumulative_option else "")
 )
 st.line_chart(prs_final)
 
